@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team 3 · Execution summary · Foodora suite</title>
+<style>
+  :root {
+    --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --pass: #2a78d6; --bug: #d03b3b; --good: #0ca30c;
+    --card-border: #e1e0d9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --axis: #383835; --pass: #3987e5; --bug: #d03b3b; --card-border: #2c2c2a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink);
+         font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 40px 24px 64px; }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 40px 0 12px; }
+  .sub { color: var(--ink-2); margin: 0 0 28px; }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  a { color: var(--pass); }
+  .card { background: var(--surface); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .tile { background: var(--surface); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; }
+  .tile .v { font-size: 32px; font-weight: 650; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .tile .l { color: var(--ink-2); font-size: 13px; margin-top: 4px; }
+  .tile .mark { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; }
+
+  .legend { display: flex; gap: 18px; color: var(--ink-2); font-size: 13px; margin-bottom: 14px; }
+  .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px;
+                         margin-right: 6px; vertical-align: -1px; background: var(--c); }
+  .chart { display: grid; grid-template-columns: 64px 1fr 72px; row-gap: 10px; align-items: center; }
+  .chart .sid { font-weight: 600; font-size: 13px; }
+  .chart .tot { color: var(--muted); font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; }
+  .track { position: relative; height: 22px; border-left: 1px solid var(--axis);
+           background: repeating-linear-gradient(90deg, transparent 0 calc(100% / 11 - 1px), var(--grid) calc(100% / 11 - 1px) calc(100% / 11)); }
+  .bar { display: flex; gap: 2px; height: 100%; }
+  .seg { height: 100%; display: flex; align-items: center; justify-content: flex-start; padding-left: 6px;
+         color: #fff; font-size: 12px; font-weight: 600; cursor: default; position: relative; }
+  .seg.pass { background: var(--pass); }
+  .seg.bug { background: var(--bug); border-radius: 0 4px 4px 0; }
+  .seg.pass:last-child { border-radius: 0 4px 4px 0; }
+  .seg::after { content: ""; position: absolute; inset: -6px 0; } /* bigger hit target */
+  .seg:hover { filter: brightness(1.08); }
+  .axis { display: grid; grid-template-columns: 64px 1fr 72px; color: var(--muted); font-size: 11px; margin-top: 6px; }
+  .axis div { position: relative; height: 14px; }
+  .axis div span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+  .axis div span:first-child { transform: none; }
+  #tip { position: fixed; pointer-events: none; background: var(--surface); color: var(--ink);
+         border: 1px solid var(--card-border); border-radius: 8px; padding: 8px 10px; font-size: 12px;
+         box-shadow: 0 4px 16px rgba(0,0,0,.15); opacity: 0; transition: opacity .1s; max-width: 280px; }
+  details { margin-top: 14px; color: var(--ink-2); font-size: 13px; }
+  summary { cursor: pointer; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { text-align: left; color: var(--ink-2); font-weight: 600; border-bottom: 1px solid var(--axis); padding: 8px 10px; }
+  td { border-bottom: 1px solid var(--grid); padding: 9px 10px; vertical-align: top; }
+  td.id { white-space: nowrap; font-weight: 600; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .quote { color: var(--ink-2); font-style: italic; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 99px;
+           border: 1px solid currentColor; color: var(--ink-2); white-space: nowrap; }
+
+  .flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; counter-reset: step; }
+  .step { background: var(--surface); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; position: relative; }
+  .step::before { counter-increment: step; content: counter(step); position: absolute; top: 12px; right: 14px;
+                  color: var(--muted); font-size: 12px; font-weight: 600; }
+  .step b { display: block; margin-bottom: 4px; }
+  .step p { margin: 0; color: var(--ink-2); font-size: 13px; }
+  ul.clean { margin: 0; padding-left: 18px; }
+  ul.clean li { margin: 6px 0; }
+  footer { margin-top: 48px; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Team 3 · Foodora suite, built from the spec</h1>
+  <p class="sub">One run of <code>team-3-build-suite</code> (coding agent + Playwright MCP) on 2026-09-24, against
+    <code>https://foodora.lovable.app</code>. Expected results come from <code>spec/foodora-spec.md</code>, never
+    from what the app shows, so a red test is a finding.</p>
+
+  <section class="tiles" aria-label="Headline numbers">
+    <div class="tile"><div class="v">8</div><div class="l">stories covered (FD-01 … FD-08)</div></div>
+    <div class="tile"><div class="v">52</div><div class="l">rules, one test each</div></div>
+    <div class="tile"><div class="v"><span class="mark" style="background:var(--pass)"></span>39</div><div class="l">pass</div></div>
+    <div class="tile"><div class="v"><span class="mark" style="background:var(--bug)"></span>13</div><div class="l">fail: app bug found</div></div>
+    <div class="tile"><div class="v">0</div><div class="l">flaky or not covered</div></div>
+    <div class="tile"><div class="v">183</div><div class="l">assertions audited, 0 open issues</div></div>
+  </section>
+
+  <h2>Result per story</h2>
+  <div class="card">
+    <div class="legend"><span style="--c:var(--pass)">✓ Pass</span><span style="--c:var(--bug)">✗ App bug</span></div>
+    <div class="chart" id="chart" role="img" aria-label="Stacked bars of passing and bug rules per story; the table below has the same numbers"></div>
+    <div class="axis"><span></span><div><span style="left:0">0</span><span style="left:calc(500% / 11)">5</span><span style="left:calc(1000% / 11)">10 rules</span></div><span></span></div>
+    <details>
+      <summary>Table view</summary>
+      <table>
+        <thead><tr><th>Story</th><th>Title</th><th class="num">Rules</th><th class="num">Pass</th><th class="num">Bug</th></tr></thead>
+        <tbody id="storyTable"></tbody>
+      </table>
+    </details>
+  </div>
+
+  <h2>Bugs the suite found (13)</h2>
+  <div class="card" style="padding:4px 10px">
+    <table>
+      <thead><tr><th>Story</th><th>The spec says</th><th>What the app did</th></tr></thead>
+      <tbody>
+        <tr><td class="id">FD-01</td><td class="quote">“It cannot be opened.” (a restaurant that does not deliver)</td><td>Koliba u Jána's card is a normal link to a full menu you can order from.</td></tr>
+        <tr><td class="id">FD-02</td><td class="quote">“finds restaurants by restaurant name or by dish name”</td><td>“Classic Beef” gives <i>No restaurants found</i>: dish names are not searched.</td></tr>
+        <tr><td class="id">FD-02</td><td class="quote">“A search and a selected cuisine chip apply together”</td><td>The last action wins, and picking a chip overwrites the typed search.</td></tr>
+        <tr><td class="id">FD-03</td><td class="quote">“each one has an accessible name … including icon-only buttons such as quick-add”</td><td>Every quick-add button has no accessible name.</td></tr>
+        <tr><td class="id">FD-04</td><td class="quote">“Add-ons — pick any combination”</td><td>Add-ons are radio buttons: picking Bacon unchecks Extra Cheese.</td></tr>
+        <tr><td class="id">FD-04</td><td class="quote">“The cart is reachable from this page”</td><td>The dish page has no header and no Cart button.</td></tr>
+        <tr><td class="id">FD-05</td><td class="quote">“The Delivery Fee is the fee the restaurant advertises — Free means $0.00”</td><td>Every restaurant is charged $2.99, including those that advertise Free.</td></tr>
+        <tr><td class="id">FD-05</td><td class="quote">“20% OFF orders over $25 takes 20 % off the subtotal once it passes $25”</td><td>No discount and no discount line above $25.</td></tr>
+        <tr><td class="id">FD-05</td><td class="quote">“offers a way back to the restaurants” (empty cart)</td><td>On a restaurant page, Continue Shopping only closes the panel. <span class="badge">a reading</span></td></tr>
+        <tr><td class="id">FD-05</td><td class="quote">“The cart survives a page reload”</td><td>Reloading empties the cart.</td></tr>
+        <tr><td class="id">FD-06</td><td class="quote">“Place Order only places the order when every required field is filled in”</td><td>Orders are placed with any required field empty, and no message appears.</td></tr>
+        <tr><td class="id">FD-07</td><td class="quote">“An order number that was never placed does not show a tracking page”</td><td><code>/order/FDR-000000</code> shows a full tracking page with Total Paid $0.00.</td></tr>
+        <tr><td class="id">FD-07</td><td class="quote">“Total paid … cannot be changed by editing the address”</td><td>Total Paid is read from <code>?total=</code>: setting it to 0.01 shows $0.01.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>How the run went</h2>
+  <div class="flow">
+    <div class="step"><b>Preflight</b><p>Address, browser, config checked. Resumed from the earlier run: FD-08 was already covered.</p></div>
+    <div class="step"><b>Explore in parallel</b><p>Three agents, one per flow group: FD-01/02, FD-03/04 and FD-05/06/07. One drove the Playwright MCP browser; the other two used their own browsers.</p></div>
+    <div class="step"><b>One question</b><p>51 new rules were put to the team, with three hard-to-reach cases as extras. The team kept the plan as it was.</p></div>
+    <div class="step"><b>Build and triage</b><p>The same agents wrote the tests from their notes. A red test was either fixed, if the test was wrong, or annotated as a bug, if the app was wrong.</p></div>
+    <div class="step"><b>Rule check</b><p><code>check-suite.sh</code>: every test has its story ID, a tag and the spec line it checks.</p></div>
+    <div class="step"><b>Independent audit</b><p>A fresh agent checked 183 assertions against the spec. It found 3 values copied from the app and 10 checks weaker than the spec; all 13 were fixed.</p></div>
+    <div class="step"><b>Stability</b><p>Every test was run 3 times. The slow live backend caused timeouts, and those were fixed at the cause, never by retrying until green.</p></div>
+    <div class="step"><b>Final run</b><p>Full suite: 39 pass, 13 app bugs, 0 flaky. Written to <code>report.html</code>.</p></div>
+  </div>
+
+  <h2>What we learned along the way</h2>
+  <div class="card">
+    <ul class="clean">
+      <li><b>The audit earned its place.</b> Checks like “some card shows a promotion” and “Cart shows /1/” passed, but they checked less than the spec says. After tightening, one more bug surfaced: the empty cart's way back.</li>
+      <li><b>A test that passes on a bug is a bug in the test.</b> The dish-name search test was first green because it read the list before the list had re-filtered. It now waits for the list to change, and correctly fails.</li>
+      <li><b>The flaky runs came from a slow backend, not from wrong assertions.</b>
+        <ul class="clean">
+          <li>Page loads waited for every image. They now wait only for the HTML, and the test itself waits for the content it needs.</li>
+          <li>Restaurant data now gets a longer wait, because it comes from the backend after the page renders.</li>
+          <li>The cart panel is closed with its <b>Close</b> button, which is reliable, instead of Escape.</li>
+        </ul></li>
+      <li><b>Controls without names make tests brittle, too.</b> Quick-add and the quantity −/+ buttons have no accessible name, so they can only be found by their position or icon. The accessibility bug (FD-03) and the test design are the same problem.</li>
+      <li><b>One run was interrupted.</b> The FD-05/06/07 builder stopped after writing its files. The lead ran and triaged those tests itself, and found one broken test, the FD-06 order summary.</li>
+    </ul>
+  </div>
+
+  <h2>Seen outside scope</h2>
+  <div class="card">
+    <ul class="clean">
+      <li><b>FD-08:</b> <code>/restaurant/&lt;unknown id&gt;</code> and <code>/product/&lt;unknown id&gt;</code> show their own “Not Found” screens with no <b>Return to Home</b>. The product one has no header either, so there is no way back.</li>
+      <li><b>FD-01 / FD-07 <span class="badge">a reading</span>:</b> checkout, confirmation and tracking show “25-35 min” for every restaurant, while the cards advertise other ranges.</li>
+    </ul>
+  </div>
+
+  <h2>Files</h2>
+  <div class="card">
+    <ul class="clean">
+      <li><a href="report.html">report.html</a>: the coverage report, with rules × results and a screenshot for every bug</li>
+      <li><a href="coverage.md">coverage.md</a>: every rule, its test title and its status, plus the readings taken</li>
+      <li><a href="audit.md">audit.md</a>: every assertion with its verdict and the fixes</li>
+      <li><code>fd-01.md … fd-08.md</code>: exploration notes (routes, roles and names, contradictions)</li>
+      <li><code>../tests/fd-0N-*.spec.ts</code>: the tests, one file per story</li>
+    </ul>
+  </div>
+
+  <footer>Team 3 · Tesena Fest 2026 Vibe Testing Lab · generated from the run's <code>coverage.md</code>, <code>audit.md</code> and the final Playwright run.</footer>
+</main>
+<div id="tip" role="tooltip"></div>
+<script>
+  const stories = [
+    ['FD-01', 'Browse restaurants', 5, 1],
+    ['FD-02', 'Search and filter', 5, 2],
+    ['FD-03', 'Restaurant menu', 5, 1],
+    ['FD-04', 'Customise a dish', 5, 2],
+    ['FD-05', 'Cart', 7, 4],
+    ['FD-06', 'Checkout', 4, 1],
+    ['FD-07', 'Confirmation and tracking', 7, 2],
+    ['FD-08', 'Page not found', 1, 0],
+  ]
+  const MAX = 11 // the axis runs 0–11 rules, one gridline per rule
+  const chart = document.getElementById('chart')
+  const table = document.getElementById('storyTable')
+  const tip = document.getElementById('tip')
+  for (const [id, title, pass, bug] of stories) {
+    const total = pass + bug
+    const seg = (cls, n, word) => n
+      ? `<div class="seg ${cls}" style="width:calc(${(n / MAX) * 100}% - 1px)" data-tip="<b>${id} · ${title}</b><br>${n} ${word} of ${total} rules">${cls === 'pass' ? '✓' : '✗'} ${n}</div>`
+      : ''
+    chart.insertAdjacentHTML('beforeend',
+      `<div class="sid">${id}</div><div class="track"><div class="bar">${seg('pass', pass, 'pass')}${seg('bug', bug, bug === 1 ? 'bug' : 'bugs')}</div></div><div class="tot">${total} ${total === 1 ? 'rule' : 'rules'}</div>`)
+    table.insertAdjacentHTML('beforeend',
+      `<tr><td class="id">${id}</td><td>${title}</td><td class="num">${total}</td><td class="num">${pass}</td><td class="num">${bug}</td></tr>`)
+  }
+  chart.addEventListener('mousemove', e => {
+    const s = e.target.closest('.seg')
+    if (!s) { tip.style.opacity = 0; return }
+    tip.innerHTML = s.dataset.tip
+    tip.style.left = Math.min(e.clientX + 14, innerWidth - 300) + 'px'
+    tip.style.top = e.clientY + 14 + 'px'
+    tip.style.opacity = 1
+  })
+  chart.addEventListener('mouseleave', () => { tip.style.opacity = 0 })
+</script>
+</body>
+</html>

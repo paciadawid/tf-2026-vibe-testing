@@ -25,47 +25,475 @@
 </style></head><body>
 <header>
   <h1>Test suite report — teams/team-3</h1>
-  <div class="meta">2026-09-24 13:09 UTC · against <code>https://foodora.lovable.app</code> · 2 s · <a href="../playwright-report/index.html">Playwright report, traces</a></div>
+  <div class="meta">2026-09-24 14:25 UTC · against <code>https://foodora.lovable.app</code> · 198 s · <a href="../playwright-report/index.html">Playwright report, traces</a></div>
   <div class="cards">
-    <div class="card"><b>1/8</b><span>stories</span></div>
-    <div class="card"><b>1</b><span>rules</span></div>
-    <div class="card pass"><b>1</b><span>pass</span></div>
-    <div class="card bug"><b>0</b><span>bugs</span></div>
+    <div class="card"><b>8/8</b><span>stories</span></div>
+    <div class="card"><b>52</b><span>rules</span></div>
+    <div class="card pass"><b>39</b><span>pass</span></div>
+    <div class="card bug"><b>13</b><span>bugs</span></div>
     <div class="card fail"><b>0</b><span>to triage</span></div>
     <div class="card flaky"><b>0</b><span>flaky</span></div>
     <div class="card gap"><b>0</b><span>not covered</span></div>
   </div>
 </header>
 <main>
-  <h2 class="part">Bugs and red tests</h2><p>Bugs: none.</p>
+  <h2 class="part">Bugs and red tests</h2>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-01 · an unavailable restaurant cannot be opened</h3>
+    <p><b>Spec says:</b> A restaurant that does not deliver to the current address is shown greyed out with a *Not available at your address* badge, and the subtitle counts them (*1 don't deliver there*). It cannot be opened.</p>
+    <p><b>The app did:</b> The unavailable restaurant's card is a normal link: selecting it opens /restaurant/&lt;id&gt; with a full menu that can be added to the cart.</p>
+    <pre>Error: selecting an unavailable card must not open its page
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: false
+Received: true</pre>
+    <a href="bugs/fd-01-an-unavailable-restaurant-cannot-be-opened.png"><img src="bugs/fd-01-an-unavailable-restaurant-cannot-be-opened.png" alt="Screenshot at the failure of FD-01 · an unavailable restaurant cannot be opened"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-02 · search finds restaurants by restaurant name and by dish name</h3>
+    <p><b>Spec says:</b> The search box finds restaurants by <b>restaurant name</b> or by <b>dish name</b>. *&quot;Classic Beef&quot;* finds the restaurant that serves the Classic Beef Burger.</p>
+    <p><b>The app did:</b> Searching &quot;Classic Beef&quot; shows No restaurants found: search matches restaurant names and cuisines, not dish names.</p>
+    <pre>Error: expect(received).toContain(expected) // indexOf
+
+Expected value: &quot;Burger Palace&quot;
+Received array: []</pre>
+    <a href="bugs/fd-02-search-finds-restaurants-by-restaurant-name-and-by-dish-name.png"><img src="bugs/fd-02-search-finds-restaurants-by-restaurant-name-and-by-dish-name.png" alt="Screenshot at the failure of FD-02 · search finds restaurants by restaurant name and by dish name"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-02 · a search and a cuisine chip apply together</h3>
+    <p><b>Spec says:</b> A search and a selected cuisine chip apply <b>together</b>: with <b>Pizza</b> selected, searching *burger* shows only restaurants that match both.</p>
+    <p><b>The app did:</b> With Pizza selected, searching &quot;burger&quot; drops the Pizza filter and shows the burger results; the last action wins (a chip even overwrites the typed search).</p>
+    <pre>Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  - 1
++ Received  + 3
+
+- Array []
++ Array [
++   &quot;Burger Palace&quot;,</pre>
+    <a href="bugs/fd-02-a-search-and-a-cuisine-chip-apply-together.png"><img src="bugs/fd-02-a-search-and-a-cuisine-chip-apply-together.png" alt="Screenshot at the failure of FD-02 · a search and a cuisine chip apply together"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-03 · every button on the restaurant page has an accessible name</h3>
+    <p><b>Spec says:</b> Every button can be used with a screen reader: each one has an accessible name that says what it does, including icon-only buttons such as quick-add.</p>
+    <p><b>The app did:</b> Every quick-add button on the restaurant page is an icon-only button with no accessible name.</p>
+    <pre>Error: expect(locator).toHaveAccessibleName(expected) failed
+
+Locator: getByRole('button').nth(2)
+Expected pattern: /\S/
+Received string:  &quot;&quot;
+Timeout: 5000ms
+
+Call log:</pre>
+    <a href="bugs/fd-03-every-button-on-the-restaurant-page-has-an-accessible-name.png"><img src="bugs/fd-03-every-button-on-the-restaurant-page-has-an-accessible-name.png" alt="Screenshot at the failure of FD-03 · every button on the restaurant page has an accessible name"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-04 · several add-ons can be picked together</h3>
+    <p><b>Spec says:</b> <b>Add-ons</b> — pick <b>any combination</b>, including none (for example *Extra Cheese* <b>and</b> *Bacon*).</p>
+    <p><b>The app did:</b> Add-ons are radio buttons: picking Bacon unchecks Extra Cheese, so only one add-on can be chosen.</p>
+    <pre>Error: expect(locator).toBeChecked() failed
+
+Locator:  getByRole('radio', { name: /^Extra Cheese/ })
+Expected: checked
+Received: unchecked
+Timeout:  5000ms
+
+Call log:</pre>
+    <a href="bugs/fd-04-several-add-ons-can-be-picked-together.png"><img src="bugs/fd-04-several-add-ons-can-be-picked-together.png" alt="Screenshot at the failure of FD-04 · several add-ons can be picked together"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-04 · cart is reachable from the dish page</h3>
+    <p><b>Spec says:</b> The cart is reachable from this page, the same as from every other page in the order flow.</p>
+    <p><b>The app did:</b> The dish page has no header and no Cart button; the cart cannot be opened from it.</p>
+    <pre>Error: expect(locator).toBeVisible() failed
+
+Locator: getByRole('button', { name: /^Cart\b/ })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:</pre>
+    <a href="bugs/fd-04-cart-is-reachable-from-the-dish-page.png"><img src="bugs/fd-04-cart-is-reachable-from-the-dish-page.png" alt="Screenshot at the failure of FD-04 · cart is reachable from the dish page"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-05 · delivery fee matches the restaurant and free is zero</h3>
+    <p><b>Spec says:</b> The <b>Delivery Fee</b> is the fee the restaurant advertises — <b>Free</b> means $0.00.</p>
+    <p><b>The app did:</b> The cart charges $2.99 delivery for every restaurant: Pizza Corner advertises Free, Sushi Masters $1.99, Mediterranean Delight $3.49.</p>
+    <pre>Error: Mediterranean Delight advertises $3.49
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: 349
+Received: 299</pre>
+    <a href="bugs/fd-05-delivery-fee-matches-the-restaurant-and-free-is-zero.png"><img src="bugs/fd-05-delivery-fee-matches-the-restaurant-and-free-is-zero.png" alt="Screenshot at the failure of FD-05 · delivery fee matches the restaurant and free is zero"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-05 · promotion takes 20% off above $25 and not below</h3>
+    <p><b>Spec says:</b> *20% OFF orders over $25* takes 20 % off the subtotal once it passes $25, and the discount shows as its own line.</p>
+    <p><b>The app did:</b> Burger Palace (20% OFF orders over $25) never gets a discount: subtotals $25.90, $36.93 and $40.93 show no discount line and the full total.</p>
+    <pre>Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  getByRole('dialog').getByText(/discount|promo|% off/i).filter({ hasNotText: /orders over/i })
+Expected: 1
+Received: 0
+Timeout:  5000ms
+
+Call log:</pre>
+    <a href="bugs/fd-05-promotion-takes-20-off-above-25-and-not-below.png"><img src="bugs/fd-05-promotion-takes-20-off-above-25-and-not-below.png" alt="Screenshot at the failure of FD-05 · promotion takes 20% off above $25 and not below"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-05 · empty cart says so and offers no checkout</h3>
+    <p><b>Spec says:</b> An empty cart says so, offers a way back to the restaurants, and offers <b>no</b> way to check out.</p>
+    <p><b>The app did:</b> Opened on a restaurant page, the empty cart's Continue Shopping only closes the panel: the customer stays on /restaurant/&lt;id&gt; and is not taken back to the restaurant list.</p>
+    <pre>Error: expect(page).toHaveURL(expected) failed
+
+Expected pattern: /\/$/
+Received string:  &quot;https://foodora.lovable.app/restaurant/1&quot;
+Timeout: 5000ms
+
+Call log:
+  - Expect &quot;toHaveURL&quot; with timeout 5000ms</pre>
+    <a href="bugs/fd-05-empty-cart-says-so-and-offers-no-checkout.png"><img src="bugs/fd-05-empty-cart-says-so-and-offers-no-checkout.png" alt="Screenshot at the failure of FD-05 · empty cart says so and offers no checkout"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-05 · cart survives a page reload</h3>
+    <p><b>Spec says:</b> The cart survives a page reload: refreshing the browser does not lose the order.</p>
+    <p><b>The app did:</b> Reloading the page empties the cart; nothing is kept in localStorage or sessionStorage.</p>
+    <pre>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 1
+Received: 0
+
+Call Log:
+- Timeout 5000ms exceeded while waiting on the predicate</pre>
+    <a href="bugs/fd-05-cart-survives-a-page-reload.png"><img src="bugs/fd-05-cart-survives-a-page-reload.png" alt="Screenshot at the failure of FD-05 · cart survives a page reload"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-06 · place order is refused while a required field is empty</h3>
+    <p><b>Spec says:</b> <b>Place Order</b> only places the order when every required field is filled in. Otherwise no order is placed, and each missing field shows a message saying what is needed.</p>
+    <p><b>The app did:</b> The app places the order with a required field empty (with Full Name empty, even with the whole form empty) and shows no message for the missing field.</p>
+    <pre>Error: no order with Full Name empty
+
+expect(locator).toHaveCount(expected) failed
+
+Locator:  getByRole('heading', { name: 'Order Confirmed!' })
+Expected: 0
+Received: 1
+Timeout:  5000ms</pre>
+    <a href="bugs/fd-06-place-order-is-refused-while-a-required-field-is-empty.png"><img src="bugs/fd-06-place-order-is-refused-while-a-required-field-is-empty.png" alt="Screenshot at the failure of FD-06 · place order is refused while a required field is empty"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-07 · unknown order number shows no tracking page</h3>
+    <p><b>Spec says:</b> Tracking works only for real orders. An order number that was never placed does not show a tracking page.</p>
+    <p><b>The app did:</b> A never-placed order number (/order/FDR-000000) shows a full tracking page with all five stages and Total Paid $0.00.</p>
+    <pre>Error: expect(locator).toHaveCount(expected) failed
+
+Locator:  getByText(/total paid/i)
+Expected: 0
+Received: 1
+Timeout:  5000ms
+
+Call log:</pre>
+    <a href="bugs/fd-07-unknown-order-number-shows-no-tracking-page.png"><img src="bugs/fd-07-unknown-order-number-shows-no-tracking-page.png" alt="Screenshot at the failure of FD-07 · unknown order number shows no tracking page"></a>
+  </article>
+  <article class="bug-card">
+    <h3><span class="badge bug">fail — bug</span> FD-07 · total paid cannot be changed through the address</h3>
+    <p><b>Spec says:</b> <b>Total paid</b> is the amount of the placed order. It cannot be changed by editing the address in the browser.</p>
+    <p><b>The app did:</b> Total Paid is read from the ?total= query: editing it to 0.01 shows $0.01, removing it shows $0.00. Nothing is kept in localStorage.</p>
+    <pre>Error: with ?total=0.01
+
+with ?total=0.01
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: 1744
+Received: 1</pre>
+    <a href="bugs/fd-07-total-paid-cannot-be-changed-through-the-address.png"><img src="bugs/fd-07-total-paid-cannot-be-changed-through-the-address.png" alt="Screenshot at the failure of FD-07 · total paid cannot be changed through the address"></a>
+  </article>
   <h2 class="part">Coverage by story</h2>
   <section>
-    <h2><span class="id">FD-01</span> Browse restaurants <span class="pills"><span class="pill todo">not started</span></span></h2>
-    
+    <h2><span class="id">FD-01</span> Browse restaurants <span class="pills"><span class="pill pass">5 pass</span><span class="pill bug">1 bug</span></span></h2>
+    <table><thead><tr><th>Status</th><th>Rule</th><th>Test</th></tr></thead><tbody>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Card shows name, cuisines, rating, delivery time range, delivery fee (or Free)<div class="spec">Spec: Each restaurant card shows the name, the cuisines, the rating, the delivery time range and the delivery fee (or <b>Free</b>).</div></td>
+        <td class="title">FD-01 · each restaurant card shows name, cuisines, rating, delivery time and fee<div class="loc">fd-01-browse-restaurants.spec.ts:5</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Card shows the current promotion when it has one<div class="spec">Spec: A card shows the restaurant's current promotion when it has one — for example *20% OFF orders over $25*.</div></td>
+        <td class="title">FD-01 · a card shows the restaurant's current promotion<div class="loc">fd-01-browse-restaurants.spec.ts:30</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Selecting a card opens that restaurant's page<div class="spec">Spec: Selecting a card opens that restaurant's page.</div></td>
+        <td class="title">FD-01 · selecting a card opens that restaurant's page<div class="loc">fd-01-browse-restaurants.spec.ts:74</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>View All shows the full list of restaurants<div class="spec">Spec: <b>View All</b> shows the full list of restaurants.</div></td>
+        <td class="title">FD-01 · view all shows the full list of restaurants<div class="loc">fd-01-browse-restaurants.spec.ts:89</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Undeliverable restaurant greyed out with Not available badge; subtitle counts them<div class="spec">Spec: A restaurant that does not deliver to the current address is shown greyed out with a *Not available at your address* badge, and the subtitle counts them (*1 don't deliver there*).</div></td>
+        <td class="title">FD-01 · an undeliverable restaurant is greyed out, badged and counted in the subtitle<div class="loc">fd-01-browse-restaurants.spec.ts:105</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>An unavailable restaurant cannot be opened<div class="spec">Spec: A restaurant that does not deliver to the current address is shown greyed out with a *Not available at your address* badge, and the subtitle counts them (*1 don't deliver there*). It cannot be opened.</div></td>
+        <td class="title">FD-01 · an unavailable restaurant cannot be opened<div class="loc">fd-01-browse-restaurants.spec.ts:137</div></td>
+      </tr></tbody></table>
   </section>
   <section>
-    <h2><span class="id">FD-02</span> Search and filter <span class="pills"><span class="pill todo">not started</span></span></h2>
-    
+    <h2><span class="id">FD-02</span> Search and filter <span class="pills"><span class="pill pass">5 pass</span><span class="pill bug">2 bug</span></span></h2>
+    <table><thead><tr><th>Status</th><th>Rule</th><th>Test</th></tr></thead><tbody>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>Search finds by restaurant name or dish name (&quot;Classic Beef&quot;)<div class="spec">Spec: The search box finds restaurants by <b>restaurant name</b> or by <b>dish name</b>. *&quot;Classic Beef&quot;* finds the restaurant that serves the Classic Beef Burger.</div></td>
+        <td class="title">FD-02 · search finds restaurants by restaurant name and by dish name<div class="loc">fd-02-search-and-filter.spec.ts:17</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Search ignores case (burger = BURGER)<div class="spec">Spec: Search ignores upper and lower case: *burger* and *BURGER* give the same result.</div></td>
+        <td class="title">FD-02 · search ignores upper and lower case<div class="loc">fd-02-search-and-filter.spec.ts:64</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Results update while typing; Search button gives the same result<div class="spec">Spec: Results update while the customer types; pressing <b>Search</b> gives the same result.</div></td>
+        <td class="title">FD-02 · results update while typing and the search button gives the same result<div class="loc">fd-02-search-and-filter.spec.ts:81</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Cuisine chips show only restaurants serving that cuisine<div class="spec">Spec: The cuisine chips (<b>All</b>, <b>Pizza</b>, <b>Burgers</b>, <b>Sushi</b>, <b>Italian</b>, <b>Mediterranean</b>) show only restaurants serving that cuisine.</div></td>
+        <td class="title">FD-02 · a cuisine chip shows only restaurants serving that cuisine<div class="loc">fd-02-search-and-filter.spec.ts:104</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>All shows every restaurant<div class="spec">Spec: <b>All</b> shows every restaurant.</div></td>
+        <td class="title">FD-02 · the all chip shows every restaurant<div class="loc">fd-02-search-and-filter.spec.ts:130</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>Search and chip apply together (Pizza + &quot;burger&quot;)<div class="spec">Spec: A search and a selected cuisine chip apply <b>together</b>: with <b>Pizza</b> selected, searching *burger* shows only restaurants that match both.</div></td>
+        <td class="title">FD-02 · a search and a cuisine chip apply together<div class="loc">fd-02-search-and-filter.spec.ts:145</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Nothing matches → No restaurants found with a hint<div class="spec">Spec: When nothing matches, the page says so — *No restaurants found* — with a hint to try another search or filter.</div></td>
+        <td class="title">FD-02 · no match shows no restaurants found with a hint<div class="loc">fd-02-search-and-filter.spec.ts:178</div></td>
+      </tr></tbody></table>
   </section>
   <section>
-    <h2><span class="id">FD-03</span> Restaurant menu <span class="pills"><span class="pill todo">not started</span></span></h2>
-    
+    <h2><span class="id">FD-03</span> Restaurant menu <span class="pills"><span class="pill pass">5 pass</span><span class="pill bug">1 bug</span></span></h2>
+    <table><thead><tr><th>Status</th><th>Rule</th><th>Test</th></tr></thead><tbody>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Restaurant page shows name, cuisines, rating, delivery time, delivery fee and promotion<div class="spec">Spec: the restaurant's name, cuisines, rating, delivery time, delivery fee and promotion;</div></td>
+        <td class="title">FD-03 · restaurant page shows name, cuisines, rating, delivery time, fee and promotion<div class="loc">fd-03-restaurant-menu.spec.ts:5</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Menu is grouped into category tabs (Burgers, Sides, Drinks)<div class="spec">Spec: the menu, grouped into category tabs (for example *Burgers*, *Sides*, *Drinks*);</div></td>
+        <td class="title">FD-03 · menu is grouped into category tabs<div class="loc">fd-03-restaurant-menu.spec.ts:37</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Each dish shows name, short description, price and a quick-add + button<div class="spec">Spec: for each dish: name, short description and price, and a quick-add <b>+</b> button.</div></td>
+        <td class="title">FD-03 · each dish shows name, description, price and a quick-add button<div class="loc">fd-03-restaurant-menu.spec.ts:60</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Quick-add puts one of that dish in the cart, confirms it, header cart count goes up by one<div class="spec">Spec: Quick-add puts one of that dish into the cart and confirms it. The cart count in the header goes up by one.</div></td>
+        <td class="title">FD-03 · quick-add puts one dish in the cart, confirms it and raises the cart count by one<div class="loc">fd-03-restaurant-menu.spec.ts:87</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Selecting the dish opens its detail page<div class="spec">Spec: Selecting the dish itself opens its detail page (FD-04).</div></td>
+        <td class="title">FD-03 · selecting a dish opens its detail page<div class="loc">fd-03-restaurant-menu.spec.ts:116</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>Every button has an accessible name saying what it does, including icon-only quick-add<div class="spec">Spec: Every button can be used with a screen reader: each one has an accessible name that says what it does, including icon-only buttons such as quick-add.</div></td>
+        <td class="title">FD-03 · every button on the restaurant page has an accessible name<div class="loc">fd-03-restaurant-menu.spec.ts:136</div></td>
+      </tr></tbody></table>
   </section>
   <section>
-    <h2><span class="id">FD-04</span> Customise a dish <span class="pills"><span class="pill todo">not started</span></span></h2>
-    
+    <h2><span class="id">FD-04</span> Customise a dish <span class="pills"><span class="pill pass">5 pass</span><span class="pill bug">2 bug</span></span></h2>
+    <table><thead><tr><th>Status</th><th>Rule</th><th>Test</th></tr></thead><tbody>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Dish page shows photo, description, rating, preparation time and calories<div class="spec">Spec: The dish page (<code>/product/&lt;id&gt;</code>) shows the photo, description, rating, preparation time and calories.</div></td>
+        <td class="title">FD-04 · dish page shows photo, description, rating, preparation time and calories<div class="loc">fd-04-customise-a-dish.spec.ts:27</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Size: pick exactly one (Regular or Large +$3.00)<div class="spec">Spec: <b>Size</b> — pick exactly one (for example *Regular* or *Large +$3.00*).</div></td>
+        <td class="title">FD-04 · exactly one size can be picked<div class="loc">fd-04-customise-a-dish.spec.ts:48</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>Add-ons: any combination, including none (Extra Cheese and Bacon)<div class="spec">Spec: <b>Add-ons</b> — pick <b>any combination</b>, including none (for example *Extra Cheese* <b>and</b> *Bacon*).</div></td>
+        <td class="title">FD-04 · several add-ons can be picked together<div class="loc">fd-04-customise-a-dish.spec.ts:71</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Quantity: 1 or more<div class="spec">Spec: <b>Quantity</b> — 1 or more.</div></td>
+        <td class="title">FD-04 · quantity is 1 or more<div class="loc">fd-04-customise-a-dish.spec.ts:104</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Add to Cart button shows the configured price and updates with size, add-ons and quantity<div class="spec">Spec: The <b>Add to Cart</b> button shows the price of what is configured, and updates as the customer changes size, add-ons or quantity.</div></td>
+        <td class="title">FD-04 · add to cart button shows the configured price and follows every change<div class="loc">fd-04-customise-a-dish.spec.ts:121</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Tabs show Ingredients, Reviews and Nutrition<div class="spec">Spec: Tabs show *Ingredients*, *Reviews* and *Nutrition*.</div></td>
+        <td class="title">FD-04 · tabs show ingredients, reviews and nutrition<div class="loc">fd-04-customise-a-dish.spec.ts:157</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>Cart is reachable from the dish page<div class="spec">Spec: The cart is reachable from this page, the same as from every other page in the order flow.</div></td>
+        <td class="title">FD-04 · cart is reachable from the dish page<div class="loc">fd-04-customise-a-dish.spec.ts:173</div></td>
+      </tr></tbody></table>
   </section>
   <section>
-    <h2><span class="id">FD-05</span> Cart <span class="pills"><span class="pill todo">not started</span></span></h2>
-    
+    <h2><span class="id">FD-05</span> Cart <span class="pills"><span class="pill pass">7 pass</span><span class="pill bug">4 bug</span></span></h2>
+    <table><thead><tr><th>Status</th><th>Rule</th><th>Test</th></tr></thead><tbody>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Cart button in the header shows how many items are in the cart<div class="spec">Spec: The cart opens as a panel from the <b>Cart</b> button in the header. The button shows how many items are in the cart.</div></td>
+        <td class="title">FD-05 · cart button shows the number of items in the cart<div class="loc">fd-05-cart.spec.ts:36</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Each line shows dish, restaurant, price, − / + stepper and a way to remove it<div class="spec">Spec: Each line shows the dish, the restaurant, the price and a quantity stepper (<b>−</b> / <b>+</b>), and a way to remove it.</div></td>
+        <td class="title">FD-05 · each cart line shows dish, restaurant, price, stepper and remove<div class="loc">fd-05-cart.spec.ts:63</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>With two or more different dishes, Clear Cart appears and removes everything<div class="spec">Spec: With two or more different dishes in the cart, <b>Clear Cart</b> appears and removes everything</div></td>
+        <td class="title">FD-05 · clear cart appears with two dishes and empties the cart<div class="loc">fd-05-cart.spec.ts:92</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>With a single dish, Clear Cart is not shown<div class="spec">Spec: with a single dish it is not shown.</div></td>
+        <td class="title">FD-05 · clear cart is hidden with a single dish<div class="loc">fd-05-cart.spec.ts:115</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Summary shows Subtotal, Delivery Fee, Service Fee, Total; Total = Subtotal − discount + Delivery + Service<div class="spec">Spec: The summary shows <b>Subtotal</b>, <b>Delivery Fee</b>, <b>Service Fee</b> and <b>Total</b>, and Total = Subtotal − discount + Delivery Fee + Service Fee.</div></td>
+        <td class="title">FD-05 · summary shows all lines and the total adds up<div class="loc">fd-05-cart.spec.ts:128</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>Delivery Fee is the fee the restaurant advertises; Free means $0.00<div class="spec">Spec: The <b>Delivery Fee</b> is the fee the restaurant advertises — <b>Free</b> means $0.00.</div></td>
+        <td class="title">FD-05 · delivery fee matches the restaurant and free is zero<div class="loc">fd-05-cart.spec.ts:152</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Service Fee is a flat $1.50 per order<div class="spec">Spec: The <b>Service Fee</b> is a flat $1.50 per order.</div></td>
+        <td class="title">FD-05 · service fee is a flat amount per order<div class="loc">fd-05-cart.spec.ts:183</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>20% OFF orders over $25 takes 20 % off once subtotal passes $25, shown as its own line<div class="spec">Spec: *20% OFF orders over $25* takes 20 % off the subtotal once it passes $25, and the discount shows as its own line.</div></td>
+        <td class="title">FD-05 · promotion takes 20% off above $25 and not below<div class="loc">fd-05-cart.spec.ts:202</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Proceed to Checkout takes the customer to checkout<div class="spec">Spec: <b>Proceed to Checkout</b> takes the customer to checkout.</div></td>
+        <td class="title">FD-05 · proceed to checkout opens checkout<div class="loc">fd-05-cart.spec.ts:247</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>Empty cart says so, offers a way back, and no way to check out<div class="spec">Spec: An empty cart says so, offers a way back to the restaurants, and offers <b>no</b> way to check out.</div></td>
+        <td class="title">FD-05 · empty cart says so and offers no checkout<div class="loc">fd-05-cart.spec.ts:259</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>The cart survives a page reload<div class="spec">Spec: The cart survives a page reload: refreshing the browser does not lose the order.</div></td>
+        <td class="title">FD-05 · cart survives a page reload<div class="loc">fd-05-cart.spec.ts:290</div></td>
+      </tr></tbody></table>
   </section>
   <section>
-    <h2><span class="id">FD-06</span> Checkout <span class="pills"><span class="pill todo">not started</span></span></h2>
-    
+    <h2><span class="id">FD-06</span> Checkout <span class="pills"><span class="pill pass">4 pass</span><span class="pill bug">1 bug</span></span></h2>
+    <table><thead><tr><th>Status</th><th>Rule</th><th>Test</th></tr></thead><tbody>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Checkout has Delivery Address form, Payment Method choice and Order Summary with the cart's lines<div class="spec">Spec: The checkout page (<code>/checkout</code>) has a <b>Delivery Address</b> form, a <b>Payment Method</b> choice and an <b>Order Summary</b> with the same lines as the cart.</div></td>
+        <td class="title">FD-06 · checkout shows address form, payment choice and matching order summary<div class="loc">fd-06-checkout.spec.ts:17</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Payment method is Credit / Debit Card (default), Cash on Delivery or Apple Pay<div class="spec">Spec: Payment method is one of <b>Credit / Debit Card</b> (selected by default), <b>Cash on Delivery</b> or <b>Apple Pay</b>.</div></td>
+        <td class="title">FD-06 · payment methods offered with card selected by default<div class="loc">fd-06-checkout.spec.ts:64</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>Place Order only places the order when every required field is filled; each missing field shows a message<div class="spec">Spec: <b>Place Order</b> only places the order when every required field is filled in. Otherwise no order is placed, and each missing field shows a message saying what is needed.</div></td>
+        <td class="title">FD-06 · place order is refused while a required field is empty<div class="loc">fd-06-checkout.spec.ts:90</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Apt / Suite and Delivery Instructions are optional<div class="spec">Spec: <b>Place Order</b> only places the order when every required field is filled in.</div></td>
+        <td class="title">FD-06 · order places with optional fields blank<div class="loc">fd-06-checkout.spec.ts:130</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Checkout opened with an empty cart shows an empty state with a way back<div class="spec">Spec: Opening checkout with an empty cart shows an empty state with a way back to the restaurants — never a form that could place an empty order.</div></td>
+        <td class="title">FD-06 · checkout with an empty cart shows an empty state<div class="loc">fd-06-checkout.spec.ts:149</div></td>
+      </tr></tbody></table>
   </section>
   <section>
-    <h2><span class="id">FD-07</span> Confirmation and tracking <span class="pills"><span class="pill todo">not started</span></span></h2>
-    
+    <h2><span class="id">FD-07</span> Confirmation and tracking <span class="pills"><span class="pill pass">7 pass</span><span class="pill bug">2 bug</span></span></h2>
+    <table><thead><tr><th>Status</th><th>Rule</th><th>Test</th></tr></thead><tbody>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Confirmation shows Order Confirmed!, placed line, estimated delivery, order number and total<div class="spec">Spec: The customer sees <b>Order Confirmed!</b>, a line saying the order was placed, the estimated delivery time, the order number and the total.</div></td>
+        <td class="title">FD-07 · confirmation shows heading, message, delivery time, number and total<div class="loc">fd-07-confirmation-and-tracking.spec.ts:18</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Order numbers look like FDR- plus six upper-case letters or digits<div class="spec">Spec: Order numbers look like <code>FDR-</code> followed by six upper-case letters or digits</div></td>
+        <td class="title">FD-07 · order number is FDR- followed by six characters<div class="loc">fd-07-confirmation-and-tracking.spec.ts:38</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Every order gets a new order number<div class="spec">Spec: every order gets a new one.</div></td>
+        <td class="title">FD-07 · every order gets a new order number<div class="loc">fd-07-confirmation-and-tracking.spec.ts:52</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Track My Order opens the tracking page<div class="spec">Spec: <b>Track My Order</b> opens the tracking page</div></td>
+        <td class="title">FD-07 · track my order opens the tracking page<div class="loc">fd-07-confirmation-and-tracking.spec.ts:65</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Back to Home returns to the landing page<div class="spec">Spec: <b>Back to Home</b> returns to the landing page.</div></td>
+        <td class="title">FD-07 · back to home returns to the landing page<div class="loc">fd-07-confirmation-and-tracking.spec.ts:75</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Tracking page shows order number, total paid and estimated delivery<div class="spec">Spec: the order number, the <b>total paid</b> and the estimated delivery;</div></td>
+        <td class="title">FD-07 · tracking page shows number, total paid and estimated delivery<div class="loc">fd-07-confirmation-and-tracking.spec.ts:86</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Five stages in order: Order Confirmed → Preparing → Ready for Pickup → On the Way → Delivered<div class="spec">Spec: five stages in order: *Order Confirmed → Preparing → Ready for Pickup → On the Way → Delivered*.</div></td>
+        <td class="title">FD-07 · tracking shows the five stages in order<div class="loc">fd-07-confirmation-and-tracking.spec.ts:104</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>An order number that was never placed does not show a tracking page<div class="spec">Spec: Tracking works only for real orders. An order number that was never placed does not show a tracking page.</div></td>
+        <td class="title">FD-07 · unknown order number shows no tracking page<div class="loc">fd-07-confirmation-and-tracking.spec.ts:127</div></td>
+      </tr>
+      <tr>
+        <td><span class="badge bug">fail — bug</span></td>
+        <td>Total paid is the placed amount and cannot be changed by editing the address<div class="spec">Spec: <b>Total paid</b> is the amount of the placed order. It cannot be changed by editing the address in the browser.</div></td>
+        <td class="title">FD-07 · total paid cannot be changed through the address<div class="loc">fd-07-confirmation-and-tracking.spec.ts:151</div></td>
+      </tr></tbody></table>
   </section>
   <section>
     <h2><span class="id">FD-08</span> Page not found <span class="pills"><span class="pill pass">1 pass</span></span></h2>
@@ -76,5 +504,5 @@
         <td class="title">FD-08 · any address that is not a Foodora page shows 404 — Page not found and a Return to Home link<div class="loc">fd-08-page-not-found.spec.ts:4</div></td>
       </tr></tbody></table>
   </section>
-  
+  <h2 class="part">Seen outside scope</h2><section><ul><li>FD-08 (not in scope): <code>/restaurant/&lt;unknown id&gt;</code> and <code>/product/&lt;unknown id&gt;</code> show their own</li><li>  &quot;Not Found&quot; screens without <b>Return to Home</b>; <code>/product/&lt;unknown id&gt;</code> has no header, so there is</li><li>  no way back.</li><li>FD-01 / FD-07 (a reading): checkout, confirmation and tracking show &quot;Estimated delivery: 25-35</li><li>  min&quot; for every restaurant, while the cards advertise other ranges (Sushi Masters 20-30 min,</li><li>  Mediterranean Delight 35-45 min).</li></ul></section>
 </main></body></html>
