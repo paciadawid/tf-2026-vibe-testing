@@ -5,7 +5,7 @@ only inside it. The day's steps are in [`playbook/04-build.md`](../../playbook/0
 
 - **Team:** Team 3
 - **Tool:** c · Coding agent + Playwright MCP
-- **Skill:** `.github/skills/team-3-my-skill/` — run it with `run team-3-my-skill`
+- **Skill:** `.github/skills/team-3-build-suite/` — run it with `run team-3-build-suite`
 
 ## Checklist
 
