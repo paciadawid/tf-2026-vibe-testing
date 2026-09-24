@@ -24,6 +24,35 @@ only inside it. The day's steps are in [`playbook/04-build.md`](../../playbook/0
 - [ ] Cold run passes: fresh agent session, only the `SKILL.md` and `run team-N-<name>`, no follow-up prompts — **14:20**
 - [ ] Pushed, pull request up to date — **14:30**
 
+## Suite
+
+Three business-critical areas, one test per spec rule:
+
+| File | Area | Stories |
+| --- | --- | --- |
+| [`tests/price-correctness.spec.ts`](tests/price-correctness.spec.ts) | What the customer pays | FD-03, FD-04, FD-05 |
+| [`tests/checkout-gate.spec.ts`](tests/checkout-gate.spec.ts) | Whether an order can be placed | FD-06 |
+| [`tests/order-integrity.spec.ts`](tests/order-integrity.spec.ts) | Proof the order exists, and what was paid | FD-07 |
+
+Shared setup is in [`tests/helpers.ts`](tests/helpers.ts).
+
+## Findings: app vs. spec
+
+Against `https://foodora.lovable.app` on 2026-09-24, 29 tests pass and 13 fail. Each failing test
+checks one spec rule, so these are bugs in the build, not broken tests:
+
+| Spec | Rule | What the build does |
+| --- | --- | --- |
+| FD-03 | Icon-only buttons have an accessible name | Quick-add **+** has no name. The cart's − / + / remove buttons don't either |
+| FD-04 | Add-ons: any combination | Add-ons are radio buttons, so picking Bacon unselects Extra Cheese |
+| FD-04 | Cart reachable from the dish page | The dish page has no Cart button |
+| FD-05 | Delivery Fee = advertised fee, Free = $0.00 | Pizza Corner advertises Free, but the cart charges $2.99 |
+| FD-05 | 20% OFF over $25 applied automatically | Subtotal $27.94 at Burger Palace gets no discount line, and the total is $32.43 |
+| FD-05 | Cart survives a page reload | The cart is empty after a reload |
+| FD-06 | Place Order only with every required field | A blank form, or one missing any single required field, places the order |
+| FD-07 | Tracking only for real orders | `/order/FDR-NOPE00` shows a tracking page |
+| FD-07 | Total paid can't be changed in the address | `?total=0.01` in the tracking URL shows **Total Paid $0.01** |
+
 ## Run
 
 ```bash
