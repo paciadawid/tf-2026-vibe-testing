@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test suite report · teams/team-3</title>
+<style>
+  :root { --pass:#1a7f37; --bug:#cf222e; --fail:#bc4c00; --flaky:#9a6700; --gap:#6e7781; --todo:#0969da; --skip:#8c959f; --line:#d0d7de; }
+  * { box-sizing: border-box } body { font: 15px/1.5 system-ui, -apple-system, Segoe UI, sans-serif; margin: 0; color: #1f2328; background: #f6f8fa }
+  header { background: #fff; border-bottom: 1px solid var(--line); padding: 24px 32px } main { padding: 24px 32px; max-width: 1200px }
+  h1 { margin: 0 0 4px; font-size: 22px } .meta { color: #59636e; font-size: 13px } .meta a { color: var(--todo) }
+  .cards { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px 16px; min-width: 110px }
+  .card b { display: block; font-size: 24px } .card span { font-size: 12px; color: #59636e; text-transform: uppercase; letter-spacing: .04em }
+  .card.pass b { color: var(--pass) } .card.bug b { color: var(--bug) } .card.fail b { color: var(--fail) } .card.flaky b { color: var(--flaky) } .card.gap b { color: var(--gap) }
+  section, .bug-card { background: #fff; border: 1px solid var(--line); border-radius: 8px; margin: 0 0 16px; padding: 12px 16px }
+  h2 { font-size: 16px; margin: 4px 0 8px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap } h2 .id { font-family: ui-monospace, monospace; color: #59636e }
+  .pills { margin-left: auto; display: flex; gap: 4px } .pill { font-size: 12px; padding: 1px 8px; border-radius: 10px; color: #fff }
+  table { width: 100%; border-collapse: collapse } th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-top: 1px solid var(--line) }
+  th { font-size: 12px; color: #59636e; font-weight: 600 } td:first-child { width: 120px } .title { width: 40% }
+  .badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 10px; color: #fff; white-space: nowrap }
+  .pass { background: var(--pass) } .bug { background: var(--bug) } .fail { background: var(--fail) } .flaky { background: var(--flaky) } .gap { background: var(--gap) } .todo { background: var(--todo) } .skip { background: var(--skip) }
+  .card.pass, .card.bug, .card.fail, .card.flaky, .card.gap { background: #fff }
+  .spec, .loc { font-size: 12px; color: #59636e; margin-top: 2px } .loc { font-family: ui-monospace, monospace }
+  .bug-card h3 { font-size: 15px; margin: 4px 0 } pre { background: #f6f8fa; padding: 8px; overflow-x: auto; font-size: 12px; border-radius: 6px }
+  .bug-card img { max-width: 480px; width: 100%; border: 1px solid var(--line); border-radius: 6px }
+  h2.part { font-size: 18px; margin: 28px 0 12px }
+</style></head><body>
+<header>
+  <h1>Test suite report — teams/team-3</h1>
+  <div class="meta">2026-09-24 13:09 UTC · against <code>https://foodora.lovable.app</code> · 2 s · <a href="../playwright-report/index.html">Playwright report, traces</a></div>
+  <div class="cards">
+    <div class="card"><b>1/8</b><span>stories</span></div>
+    <div class="card"><b>1</b><span>rules</span></div>
+    <div class="card pass"><b>1</b><span>pass</span></div>
+    <div class="card bug"><b>0</b><span>bugs</span></div>
+    <div class="card fail"><b>0</b><span>to triage</span></div>
+    <div class="card flaky"><b>0</b><span>flaky</span></div>
+    <div class="card gap"><b>0</b><span>not covered</span></div>
+  </div>
+</header>
+<main>
+  <h2 class="part">Bugs and red tests</h2><p>Bugs: none.</p>
+  <h2 class="part">Coverage by story</h2>
+  <section>
+    <h2><span class="id">FD-01</span> Browse restaurants <span class="pills"><span class="pill todo">not started</span></span></h2>
+    
+  </section>
+  <section>
+    <h2><span class="id">FD-02</span> Search and filter <span class="pills"><span class="pill todo">not started</span></span></h2>
+    
+  </section>
+  <section>
+    <h2><span class="id">FD-03</span> Restaurant menu <span class="pills"><span class="pill todo">not started</span></span></h2>
+    
+  </section>
+  <section>
+    <h2><span class="id">FD-04</span> Customise a dish <span class="pills"><span class="pill todo">not started</span></span></h2>
+    
+  </section>
+  <section>
+    <h2><span class="id">FD-05</span> Cart <span class="pills"><span class="pill todo">not started</span></span></h2>
+    
+  </section>
+  <section>
+    <h2><span class="id">FD-06</span> Checkout <span class="pills"><span class="pill todo">not started</span></span></h2>
+    
+  </section>
+  <section>
+    <h2><span class="id">FD-07</span> Confirmation and tracking <span class="pills"><span class="pill todo">not started</span></span></h2>
+    
+  </section>
+  <section>
+    <h2><span class="id">FD-08</span> Page not found <span class="pills"><span class="pill pass">1 pass</span></span></h2>
+    <table><thead><tr><th>Status</th><th>Rule</th><th>Test</th></tr></thead><tbody>
+      <tr>
+        <td><span class="badge pass">pass</span></td>
+        <td>Any address that is not a Foodora page shows 404 — Page not found and a Return to Home link<div class="spec">Spec: Any address that is not a Foodora page shows <b>404 — Page not found</b> and a <b>Return to Home</b> link.</div></td>
+        <td class="title">FD-08 · any address that is not a Foodora page shows 404 — Page not found and a Return to Home link<div class="loc">fd-08-page-not-found.spec.ts:4</div></td>
+      </tr></tbody></table>
+  </section>
+  
+</main></body></html>

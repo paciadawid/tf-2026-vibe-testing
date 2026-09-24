@@ -6,6 +6,12 @@ only inside it. The day's steps are in [`playbook/04-build.md`](../../playbook/0
 - **Team:** Team 3
 - **Tool:** c · Coding agent + Playwright MCP
 - **Skill:** `.github/skills/team-3-build-suite/` — run it with `run team-3-build-suite`
+  (explore, ask once, write the tests, audit them, report)
+- **Second skill:** `.github/skills/team-3-triage-run/` — `run team-3-triage-run` re-runs the
+  suite against the current build, sorts the red tests into bug, broken test or spec change, and
+  rewrites the report
+- **Report:** [`specs/report.html`](specs/report.html) — stories × rules, bugs with the spec line
+  and a screenshot; [`specs/coverage.md`](specs/coverage.md) is the same table in Markdown
 
 ## Checklist
 

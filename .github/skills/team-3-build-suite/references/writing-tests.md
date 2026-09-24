@@ -12,13 +12,29 @@ Read this before writing the first test of a run.
 ## Files and names
 
 - One file per story: `tests/<id>-<slug>.spec.ts`, e.g. `tests/fd-05-cart.spec.ts`.
-- One `test.describe('<ID> · <story title>')` per file, **one test per rule**, and every test title
-  starts with the ID: `test('FD-05 · service fee is a flat amount per order', …)`. A test that
-  checks five rules stops at the first failure and never checks the other four.
-- An area the user added at the checkpoint that no spec story covers: title it with the closest
-  story's ID, or `EX-01 · …` onwards when none fits, and quote the user's words as the expected
-  result in a comment.
-- Above each test, one comment quoting the spec line it checks.
+- One `test.describe` per file, titled `<ID> · <story title>` and tagged with the ID; **one test
+  per rule**, its title starting with the ID and equal to the Test title in `coverage.md`. A test
+  that checks five rules stops at the first failure and never checks the other four.
+- Every test carries a `spec` annotation quoting the spec line it checks, word for word. The
+  report shows it next to the result, and the audit checks each `expect` against it.
+
+```ts
+import { test, expect } from '@playwright/test'
+
+test.describe('FD-05 · Cart and totals', { tag: '@FD-05' }, () => {
+  test(
+    'FD-05 · service fee is a flat amount per order',
+    { annotation: { type: 'spec', description: 'Service Fee is a flat **$1.50** per order.' } },
+    async ({ page }) => {
+      // …
+    },
+  )
+})
+```
+
+- An area the user added at the checkpoint that no spec story covers: use the closest story's ID,
+  or `EX-01 · …` onwards when none fits, with the user's words as the `spec` description.
+- `check-suite.sh` fails the suite when a title, tag or `spec` annotation is missing.
 
 ## From snapshot to locator
 
@@ -89,19 +105,27 @@ These are what the checkpoint question is for; check every one against the rules
 Run the one file again with `--retries=0` and read the error first.
 
 1. **Locator not found or ambiguous, timeout on something that exists** → the test is wrong.
-   Replay that step with the MCP tools, take the role and name from the new snapshot, fix the
-   locator. At most **two** fixes per test; after that, record it as NOT COVERED with the reason.
+   Replay that step in the browser you explored with (the MCP tools, or `explore.mjs` with the
+   test's steps), take the role and name from the new snapshot, fix the locator. The error's
+   `error-context.md` in the run's output folder also holds the page's snapshot at the failure. At most **two** fixes per test; after that, delete the test and set its row in
+   `coverage.md` to `not covered — <reason>`.
 2. **The app did something the spec forbids** (a wrong total, a missing message, an order placed
    with an empty field) → the app is wrong. Keep the assertion exactly as the spec states it,
-   leave the test red, and put this above it:
+   leave the test red, and add a `bug` annotation saying what the app did:
 
    ```ts
-   // BUG FD-06: spec says "Place Order only places the order when every required field is filled in".
-   // The app placed an order with City empty. Left failing on purpose.
+   {
+     annotation: [
+       { type: 'spec', description: 'Place Order only places the order when every required field is filled in.' },
+       { type: 'bug', description: 'The app placed an order with City empty.' },
+     ],
+   },
    ```
 
-   Then add the bug to `specs/coverage.md`. Never change the expected value to match the app,
-   never `test.skip`, `test.fixme` or `test.fail` it.
+   `run-report.mjs` then reports the row as `fail — bug` with both lines and the screenshot.
+   Never change the expected value to match the app, never `test.skip`, `test.fixme` or
+   `test.fail` it. A test with a `bug` annotation that passes on a later build is fixed: remove
+   the annotation.
 3. **Passes alone, fails in the full run or on repeat** → shared state or a race. Find what the
    test assumed (order, leftover data, content not yet loaded) and make it wait on or build that
    itself.
